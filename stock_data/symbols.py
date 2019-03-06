@@ -51,7 +51,9 @@ class Symbol:
 
         # Open files and return company name 
         for f in self.files:
-            with open(f) as 
+            with open(f) as fd:
+                companies.append(fd)
         
         # Remove new line
-        # companies = [x.strip() for x in tickers]
+        companies = [x.strip() for x in companies]
+        return companies
