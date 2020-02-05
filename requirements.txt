@@ -1,0 +1,6 @@
+#
+####### requirements.txt #######
+#
+###### Requirements without Version Specifiers ######
+newspaper3k
+ystockquote

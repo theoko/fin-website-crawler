@@ -1,6 +1,7 @@
 from newspaper import Article
 import ystockquote
 
+
 class StockParser:
 
     def __init__(self, url, tickers_list):
@@ -35,7 +36,6 @@ class StockParser:
         
         # Search article title and text for names
         for sentence in self.getArticleInSentences():
-            
             # Filter symbol from list of symbols
             for ticker in self.tickers:
                 if ticker in sentence:

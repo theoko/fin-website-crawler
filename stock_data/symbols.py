@@ -2,6 +2,24 @@ import ftplib
 import os
 import re
 
+
+def tickers_file_exists():
+    return os.path.isfile("tickers.txt")
+
+
+def get_ticker_list():
+    if tickers_file_exists():
+        with open("tickers.txt") as f:
+            tickers = f.readlines()
+
+        # Remove new line
+        tickers = [x.strip() for x in tickers]
+
+        return tickers
+    else:
+        return []
+
+
 class Symbol:
 
     def __init__(self):
@@ -26,22 +44,7 @@ class Symbol:
                         if re.search("Common Stock", line):
                                 ticker = line.split("|")[0]
                                 # Append tickers to file tickers.txt
-                                open("tickers.txt","a+").write(ticker + "\n")
-
-    def tickers_file_exists(self):
-        return os.path.isfile("tickers.txt")
-
-    def get_ticker_list(self):
-        if self.tickers_file_exists():
-            with open("tickers.txt") as f:
-                tickers = f.readlines()
-
-            # Remove new line
-            tickers = [x.strip() for x in tickers]
-
-            return tickers
-        else:
-            return []
+                                open("tickers.txt", "a+").write(ticker + "\n")
 
     """
     Get company name by ticker
