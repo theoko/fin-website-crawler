@@ -1,5 +1,6 @@
 from stock_data.symbols import Symbol, get_ticker_list
 from stock_parser.stock import StockParser
+from sites.marketwatch.marketwatch import Marketwatch
 
 if __name__ == '__main__':
 
@@ -28,8 +29,10 @@ if __name__ == '__main__':
     # -- tickers.txt
     # symbols.write_file()
 
-    tickers = get_ticker_list()
-
-    stocks = StockParser(url, tickers)
-    stocks.parse()
-    print(stocks.getArticleSymbols())
+    # tickers = get_ticker_list()
+    #
+    # stocks = StockParser(url, tickers)
+    # stocks.parse()
+    # print(stocks.getArticleSymbols())
+    mw = Marketwatch(url)
+    mw.get_symbols()
