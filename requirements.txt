@@ -4,4 +4,6 @@
 ###### Requirements without Version Specifiers ######
 newspaper3k
 ystockquote
+yfinance
+matplotlib
 bs4

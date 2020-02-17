@@ -1,6 +1,6 @@
-from stock_data.symbols import Symbol, get_ticker_list
-from stock_parser.stock import StockParser
-from sites.marketwatch.marketwatch import Marketwatch
+from misc.stock_data.symbols import Symbol
+from sites.marketwatch.article_analysis.marketwatch_analysis import MarketwatchAnalysis
+from sites.marketwatch.website_scraper.marketwatch_scraper import MarketwatchScraper
 
 if __name__ == '__main__':
 
@@ -34,5 +34,7 @@ if __name__ == '__main__':
     # stocks = StockParser(url, tickers)
     # stocks.parse()
     # print(stocks.getArticleSymbols())
-    mw = Marketwatch(url)
-    mw.get_symbols()
+    # mw = Marketwatch(url)
+    # print(mw.get_symbols())
+    mw = MarketwatchScraper("https://www.marketwatch.com/")
+    mw.run()

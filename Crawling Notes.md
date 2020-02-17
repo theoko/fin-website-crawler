@@ -1,5 +1,14 @@
-# Crawling Notes
-Notes used for writing a crawler for financial news sites in order to avoid filtering plain text for stock symbols...
+# Crawling Notes (article collection)
+Notes used to collect as many articles as possible from a financial news website
+
+## Site: marketwatch.com
+Articles column XPath:
+```
+/html/body/div[3]/div[1]/div/div[3]
+```
+
+# Crawling Notes (symbol collection)
+Notes used for writing a crawler for financial news websites in order to avoid filtering plain text for stock symbols...
 
 ## Site: marketwatch.com
 
