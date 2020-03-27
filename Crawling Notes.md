@@ -7,6 +7,14 @@ Articles column XPath:
 /html/body/div[3]/div[1]/div/div[3]
 ```
 
+## Site: forbes.com
+
+## Site: ft.com
+
+## Site: fool.com
+
+## Site: cnn.com
+
 # Crawling Notes (symbol collection)
 Notes used for writing a crawler for financial news websites in order to avoid filtering plain text for stock symbols...
 
