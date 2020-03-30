@@ -10,6 +10,8 @@ class FinWebScraper(ABC):
         self.response = requests.get(url)
 
     def get_soup_object(self):
+        ## Debug
+        ## print("HTML: %s" % (self.response.text))
         soup = BeautifulSoup(self.response.text, "html.parser")
         return soup
 

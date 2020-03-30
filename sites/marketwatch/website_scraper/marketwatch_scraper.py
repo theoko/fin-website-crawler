@@ -9,10 +9,12 @@ class MarketwatchScraper(FinWebScraper):
             for content in article.find_all("div", {"class": "article__content"}):
                 for headline in content.find_all("h3", {"class": "article__headline"}):
                     for article_link in headline.find_all("a"):
+                        link_text = article.text
                         href_attr = article_link['href']
                         if self.validate_url(href_attr, "www.marketwatch.com"):
-                            print("ANALYSIS FOR: " + href_attr)
+                            # print("Title: %s" % (link_text))
+                            print("Link: %s" % (href_attr))
                             # analysis = MarketwatchAnalysis(href_attr)
                             # print(analysis.get_symbols())
-
-                            print("===========================")
+                            print("----")
+                            return (link_text, href_attr)

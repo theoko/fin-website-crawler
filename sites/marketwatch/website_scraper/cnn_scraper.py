@@ -1,11 +1,11 @@
 from sites.finwebscraper import FinWebScraper
 
+
 class CnnScraper(FinWebScraper):
     def run(self):
         """
-        cd__headline
-        cd__headline-text
-        :return:
+        h3: cd__headline
+        span: cd__headline-text
         """
         soup = super(CnnScraper, self).get_soup_object()
         for headline in soup.find_all("h3", {"class": "cd__headline"}):
