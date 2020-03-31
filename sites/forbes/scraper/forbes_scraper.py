@@ -1,3 +1,4 @@
+from classifier.classifier import Classifier
 from sites.finwebscraper import FinWebScraper
 
 
@@ -8,12 +9,20 @@ class ForbesScraper(FinWebScraper):
         headline = soup.find_all("a", {"class": "headlink h1--dense card__color--benjamins-green"})[0]
         headline_text = headline.text
         headline_link = headline.get('href', '')
+        print("----")
         print("Breaking article: %s" % (headline_text))
         print("Breaking article link: %s" % (headline_link))
+        txt_classifier = Classifier(headline_text)
+        print(txt_classifier.sentiment())
         # Gets the editors' picks on the left side
         latest_picks = {}
         for latest_picks_article in soup.find_all("a", {"class": "section-pick__title"}):
             link = latest_picks_article.get('href', '')
             title = latest_picks_article.text
             latest_picks[link] = title
-            print("Latest pick: %s" % (link))
+            print("----")
+            print("Latest pick link title: %s" % (title))
+            print("Latest pick link: %s" % (link))
+            txt_classifier = Classifier(title)
+            # print("Score: %f" % (txt_classifier.sentiment()))
+            print(txt_classifier.sentiment())

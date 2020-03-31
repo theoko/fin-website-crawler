@@ -1,10 +1,9 @@
 from misc.stock_data.symbols import Symbol
-from sites.marketwatch.website_scraper.cnn_scraper import CnnScraper
-from sites.marketwatch.website_scraper.fool_scaper import FoolScraper
-from sites.marketwatch.website_scraper.forbes_scraper import ForbesScraper
-from sites.marketwatch.website_scraper.ft_scraper import FinancialTimesScraper
-from sites.marketwatch.website_scraper.marketwatch_scraper import MarketwatchScraper
-from sites.marketwatch.website_scraper.vanguard import VanguardScraper
+from sites.cnn.scraper.cnn_scraper import CnnScraper
+from sites.fool.scraper.fool_scaper import FoolScraper
+from sites.forbes.scraper.forbes_scraper import ForbesScraper
+from sites.financial_times.scraper.ft_scraper import FinancialTimesScraper
+from sites.vanguard.scraper.vanguard import VanguardScraper
 
 if __name__ == '__main__':
 
@@ -38,26 +37,35 @@ if __name__ == '__main__':
     # stocks.parse()
     # print(stocks.getArticleSymbols())
 
+    """
+        Run the scraper for each website and store both the article and the link in the database
+    """
+
     ## Runs the marketwatch scraper
-    mw = MarketwatchScraper("https://www.marketwatch.com/")
-    mw.run()
+    # mw = MarketwatchScraper("https://www.marketwatch.com/")
+    # mw.run()
 
     ## Runs the forbes scraper
-    # forbes = ForbesScraper("https://www.forbes.com/investing/")
-    # forbes.run()
+    print("---- FORBES ----")
+    forbes = ForbesScraper("https://www.forbes.com/investing/")
+    forbes.run()
 
     ## Runs the financial times scraper
-    # ft = FinancialTimesScraper("https://www.ft.com/equities")
-    # ft.run()
+    print("---- FINANCIAL TIMES ----")
+    ft = FinancialTimesScraper("https://www.ft.com/equities")
+    ft.run()
 
     ## Runs the fool scraper
-    # fool = FoolScraper("https://www.fool.com")
-    # fool.run()
+    print("---- FOOL ----")
+    fool = FoolScraper("https://www.fool.com")
+    fool.run()
 
     ## Runs the cnn scraper
-    # cnn = CnnScraper("https://www.cnn.com/business")
-    # cnn.run()
+    print("---- CNN Business ----")
+    cnn = CnnScraper("https://www.cnn.com/business")
+    cnn.run()
 
     ## Runs the vanguard scraper
-    # vanguard = VanguardScraper("https://investornews.vanguard")
-    # vanguard.run()
+    print("---- Vanguard ----")
+    vanguard = VanguardScraper("https://investornews.vanguard")
+    vanguard.run()

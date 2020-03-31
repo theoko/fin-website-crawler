@@ -1,5 +1,5 @@
 from sites.finwebscraper import FinWebScraper
-from ..article_analysis.marketwatch_analysis import MarketwatchAnalysis
+from ..analysis.marketwatch_analysis import MarketwatchAnalysis
 
 
 class MarketwatchScraper(FinWebScraper):

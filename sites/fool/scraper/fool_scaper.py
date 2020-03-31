@@ -1,3 +1,4 @@
+from classifier.classifier import Classifier
 from sites.finwebscraper import FinWebScraper
 
 
@@ -10,4 +11,7 @@ class FoolScraper(FinWebScraper):
             article = article_li.find("a")
             article_url = article.get('href', '')
             article_title = article.text
+            print("----")
             print("Article title: %s" % (article_title))
+            txt_classifier = Classifier(article_title)
+            print(txt_classifier.sentiment())

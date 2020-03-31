@@ -7,3 +7,5 @@ ystockquote
 yfinance
 matplotlib
 bs4
+vaderSentiment
+pyodbc

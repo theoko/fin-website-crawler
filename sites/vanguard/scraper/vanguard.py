@@ -1,3 +1,4 @@
+from classifier.classifier import Classifier
 from sites.finwebscraper import FinWebScraper
 
 
@@ -14,7 +15,9 @@ class VanguardScraper(FinWebScraper):
             span = headline_link.find("span")
             span_text = span.text
             headline_link_href = headline_link.get('href', '')
+            print("----")
             print("Headline: %s" % (span_text))
             print("Article link: %s" % (headline_link_href))
-            print("----")
+            txt_classifier = Classifier(span_text)
+            print(txt_classifier.sentiment())
             return (span_text, headline_link_href)
