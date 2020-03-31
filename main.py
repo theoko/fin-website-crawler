@@ -1,3 +1,4 @@
+from alexa.top_sites import TopSites
 from misc.stock_data.symbols import Symbol
 from sites.cnn.scraper.cnn_scraper import CnnScraper
 from sites.fool.scraper.fool_scaper import FoolScraper
@@ -36,6 +37,14 @@ if __name__ == '__main__':
     # stocks = StockParser(url, tickers)
     # stocks.parse()
     # print(stocks.getArticleSymbols())
+
+    """
+        Run the Alexa scraper to find out the website rankings
+    """
+
+    ## Runs the Alexa scraper
+    top_sites = TopSites()
+    top_sites.collect()
 
     """
         Run the scraper for each website and store both the article and the link in the database
