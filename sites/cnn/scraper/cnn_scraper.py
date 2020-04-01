@@ -7,6 +7,8 @@ class CnnScraper(FinWebScraper):
         """
         h3: cd__headline
         span: cd__headline-text
+
+        Note: it doesn't work for all the headlines
         """
         soup = super(CnnScraper, self).get_soup_object()
         for headline in soup.find_all("h3", {"class": "cd__headline"}):

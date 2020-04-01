@@ -17,12 +17,16 @@ class ForbesScraper(FinWebScraper):
         # Gets the editors' picks on the left side
         latest_picks = {}
         for latest_picks_article in soup.find_all("a", {"class": "section-pick__title"}):
-            link = latest_picks_article.get('href', '')
-            title = latest_picks_article.text
+            self.article_link, link = latest_picks_article.get('href', ''), latest_picks_article.get('href', '')
+            self.article_title, title = latest_picks_article.text, latest_picks_article.text
             latest_picks[link] = title
             print("----")
             print("Latest pick link title: %s" % (title))
             print("Latest pick link: %s" % (link))
             txt_classifier = Classifier(title)
             # print("Score: %f" % (txt_classifier.sentiment()))
-            print(txt_classifier.sentiment())
+            sentiment = txt_classifier.sentiment()
+            print(sentiment)
+            self.sentiment = sentiment
+            self.update_avg_compound() # update average compound
+            self.save()  # save article to database

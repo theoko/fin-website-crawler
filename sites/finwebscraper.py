@@ -1,10 +1,15 @@
 from abc import ABC
+from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse
+from db.database import Database
+from utils.compound_average import CompoundAverage
 
 
 # An abstract class representing a finance website scraper
+from utils.parse import ParseUtils
+
+
 class FinWebScraper(ABC):
     def __init__(self, url):
         self.response = requests.get(url)
@@ -18,3 +23,17 @@ class FinWebScraper(ABC):
     def validate_url(self, url, valid_host):
         o = urlparse(url)
         return valid_host == o.netloc
+
+    def update_avg_compound(self):
+        CompoundAverage.add(self.sentiment['compound'])
+
+    def save(self):
+        db = Database()
+        db.insert_article({
+            'link': self.article_link,
+            'title': ParseUtils.strip_tags(self.article_title),
+            'neg': self.sentiment['neg'],
+            'neu': self.sentiment['neu'],
+            'pos': self.sentiment['pos'],
+            'compound': self.sentiment['compound']
+        })

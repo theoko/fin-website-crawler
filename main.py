@@ -1,10 +1,13 @@
 from alexa.top_sites import TopSites
+from db.database import Database
 from misc.stock_data.symbols import Symbol
 from sites.cnn.scraper.cnn_scraper import CnnScraper
 from sites.fool.scraper.fool_scaper import FoolScraper
 from sites.forbes.scraper.forbes_scraper import ForbesScraper
 from sites.financial_times.scraper.ft_scraper import FinancialTimesScraper
 from sites.vanguard.scraper.vanguard import VanguardScraper
+from utils.compound_average import CompoundAverage
+from utils.memcached import MemcachedUtils
 
 if __name__ == '__main__':
 
@@ -39,7 +42,23 @@ if __name__ == '__main__':
     # print(stocks.getArticleSymbols())
 
     """
-        Run the Alexa scraper to find out the website rankings
+    Clear cache
+    """
+
+    m = MemcachedUtils()
+    m.flush()
+    del m
+
+    """
+    Initialize database
+    """
+
+    ## Create db and necessary tables
+    db = Database()
+    db.create_tables()
+
+    """
+    Run the Alexa scraper to find out the website rankings
     """
 
     ## Runs the Alexa scraper
@@ -47,7 +66,7 @@ if __name__ == '__main__':
     top_sites.collect()
 
     """
-        Run the scraper for each website and store both the article and the link in the database
+    Run the scraper for each website and store both the article and the link in the database
     """
 
     ## Runs the marketwatch scraper
@@ -78,3 +97,9 @@ if __name__ == '__main__':
     print("---- Vanguard ----")
     vanguard = VanguardScraper("https://investornews.vanguard")
     vanguard.run()
+
+    """
+    Get the average compound
+    """
+    print("---- Average compound ----")
+    print("average compound: %f" % (CompoundAverage.get_average()))

@@ -1,35 +1,53 @@
-import pyodbc
+import mysql.connector
+from mysql.connector import Error
 
 
 class Database:
     def __init__(self):
-        self.conn = pyodbc.connect('Driver={MySQL ODBC 5.3 Unicode Driver};'
-                      'Server=127.0.0.1;'
-                      'Database=fin_website;'
-                      'Trusted_Connection=yes;')
-        self.conn.cursor().execute('create database if not exists fin_website')
+        self.conn = mysql.connector.connect(host='127.0.0.1',
+                                                        database='fin_website',
+                                                        # database may not be found which raises an exception
+                                                        user='root',
+                                                        password='root')
+        try:
+            # self.conn, connection = mysql.connector.connect(host='127.0.0.1',
+            #                           database='fin_website',
+            #                           user='root',
+            #                           password='root')
+            if self.conn.is_connected():
+                cursor = self.conn.cursor()
+                cursor.execute('create database if not exists fin_website')
+                # cursor.commit()
+        except Error as e:
+            print("Error: ", e)
 
     def create_tables(self):
+        cursor = self.conn.cursor()
         article_table = "create table if not exists articles (headline varchar(255), link varchar(255), neg double, " \
                         "neu double, pos double, compound double)"
-        self.conn.execute(article_table)
-        self.conn.commit()
+        cursor.execute(article_table)
+        # cursor.commit()
 
         symbols_table = "create table if not exists symbols (symbol varchar(20), link varchar(255))"
-        self.conn.execute(symbols_table)
-        self.conn.commit()
+        cursor.execute(symbols_table)
+        # cursor.commit()
 
         self.close_connection()
 
     def insert_article(self, article_data):
-        self.conn.cursor().execute("insert into products (headline, link, neg, neu, pos, compound) values ('pyodbc', 'awesome library')")
-        self.conn.commit()
+        print("saving article: %s, %s, %f, %f, %f, %f" % (article_data['link'], article_data['title'], article_data['neg'], article_data['neu'], article_data['pos'], article_data['compound']))
+        try:
+            self.conn.cursor().execute("insert into articles (headline, link, neg, neu, pos, compound) values ('%s', '%s', '%f', '%f', '%f', '%f')" % (article_data['title'], article_data['link'], article_data['neg'], article_data['neu'], article_data['pos'], article_data['compound'],))
+        except Error as e:
+            print("Error: ", e)
+        # self.conn.commit()
 
         self.close_connection()
 
     def insert_symbol(self, symbol, article_link):
-        self.conn.cursor().execute("insert into symbols (symbol, link) values ('test', 'test')")
-        self.conn.commit()
+        cursor = self.conn.cursor()
+        cursor.execute("insert into symbols (symbol, link) values ('test', 'test')")
+        cursor.commit()
 
         self.close_connection()
 
