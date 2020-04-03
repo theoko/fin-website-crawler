@@ -3,7 +3,7 @@ A program that analyzes the behavior of stocks in relation to online articles an
 
 # Libraries
 ```
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 # Issues
