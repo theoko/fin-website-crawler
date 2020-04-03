@@ -1,5 +1,6 @@
 from classifier.classifier import Classifier
 from sites.finwebscraper import FinWebScraper
+from utils.parse import ParseUtils
 
 
 class CnnScraper(FinWebScraper):
@@ -12,8 +13,12 @@ class CnnScraper(FinWebScraper):
         """
         soup = super(CnnScraper, self).get_soup_object()
         for headline in soup.find_all("h3", {"class": "cd__headline"}):
-            for headline_text in headline.find("span", {"class": "cd__headline-text"}):
+            for inner_headline in headline.find("span", {"class": "cd__headline-text"}):
                 print("----")
-                print("Headline: %s" % (headline_text))
-                txt_classifier = Classifier(headline_text)
-                print(txt_classifier.sentiment())
+                inner_headline_text = ParseUtils.strip_tags(str(inner_headline))
+                print("Headline: %s" % (inner_headline_text))
+                txt_classifier = Classifier(inner_headline_text)
+                sentiment = txt_classifier.sentiment()
+                print(sentiment)
+                self.sentiment = sentiment
+                self.update_avgs()

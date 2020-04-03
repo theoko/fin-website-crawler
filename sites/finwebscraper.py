@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 from db.database import Database
-from utils.compound_average import CompoundAverage
+from utils.average import Average
 
 
 # An abstract class representing a finance website scraper
@@ -24,14 +24,19 @@ class FinWebScraper(ABC):
         o = urlparse(url)
         return valid_host == o.netloc
 
-    def update_avg_compound(self):
-        CompoundAverage.add(self.sentiment['compound'])
+    def update_avgs(self):
+        # We want to avoid neutral articles
+        if self.sentiment['neu'] < 1.0:
+            Average.add_compound(self.sentiment['compound'])
+            Average.add_neg(self.sentiment['neg'])
+            Average.add_neu(self.sentiment['neu'])
+            Average.add_pos(self.sentiment['pos'])
 
     def save(self):
         db = Database()
         db.insert_article({
             'link': self.article_link,
-            'title': ParseUtils.strip_tags(self.article_title),
+            'title': self.article_title,
             'neg': self.sentiment['neg'],
             'neu': self.sentiment['neu'],
             'pos': self.sentiment['pos'],

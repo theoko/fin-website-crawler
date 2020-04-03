@@ -1,2 +1,4 @@
 .vscode/
 misc/stock_data/__pycache__/
+/.idea/
+/venv/

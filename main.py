@@ -1,3 +1,5 @@
+import sys
+
 from alexa.top_sites import TopSites
 from db.database import Database
 from misc.stock_data.symbols import Symbol
@@ -5,11 +7,18 @@ from sites.cnn.scraper.cnn_scraper import CnnScraper
 from sites.fool.scraper.fool_scaper import FoolScraper
 from sites.forbes.scraper.forbes_scraper import ForbesScraper
 from sites.financial_times.scraper.ft_scraper import FinancialTimesScraper
-from sites.vanguard.scraper.vanguard import VanguardScraper
-from utils.compound_average import CompoundAverage
+from sites.marketwatch.scraper.marketwatch_scraper import MarketwatchScraper
+from sites.seeking_alpha.scraper.seeking_alpha_scraper import SeekingAlphaScraper
+from sites.the_balance.scraper.the_balance_scraper import TheBalanceScraper
+from sites.vanguard.scraper.vanguard_scraper import VanguardScraper
+from sites.yahoo_finance.scraper.yfinance_scraper import YFinanceScraper
+from utils.average import Average
 from utils.memcached import MemcachedUtils
 
 if __name__ == '__main__':
+
+    # Debug
+    # sys.exit("stopped execution")
 
     # URL of article
     # This is for testing purposes
@@ -42,14 +51,6 @@ if __name__ == '__main__':
     # print(stocks.getArticleSymbols())
 
     """
-    Clear cache
-    """
-
-    m = MemcachedUtils()
-    m.flush()
-    del m
-
-    """
     Initialize database
     """
 
@@ -69,6 +70,12 @@ if __name__ == '__main__':
     Run the scraper for each website and store both the article and the link in the database
     """
 
+    # TODO: fix scraper
+    ## Runs the yahoo finance scraper
+    # yfinance = YFinanceScraper("https://finance.yahoo.com/q?s=GOOGL")
+    # yfinance.run()
+
+    # TODO: fix scraper
     ## Runs the marketwatch scraper
     # mw = MarketwatchScraper("https://www.marketwatch.com/")
     # mw.run()
@@ -93,13 +100,42 @@ if __name__ == '__main__':
     cnn = CnnScraper("https://www.cnn.com/business")
     cnn.run()
 
+    ## Runs the balance scraper
+    print("---- The balance ----")
+    the_balance = TheBalanceScraper("https://www.thebalance.com")
+    the_balance.run()
+
+    # TODO: fix scraper
     ## Runs the vanguard scraper
-    print("---- Vanguard ----")
-    vanguard = VanguardScraper("https://investornews.vanguard")
-    vanguard.run()
+    # print("---- Vanguard ----")
+    # vanguard = VanguardScraper("https://investornews.vanguard")
+    # vanguard.run()
+
+    ## Runs the seeking alpha scraper
+    print("---- Seeking alpha ----")
+    seeking_alpha = SeekingAlphaScraper("https://seekingalpha.com")
+    seeking_alpha.run()
 
     """
     Get the average compound
     """
     print("---- Average compound ----")
-    print("average compound: %f" % (CompoundAverage.get_average()))
+    print("average compound: %f, %f (x100)" % (Average.get_average_compound(), Average.get_average_compound() * 100.0))
+
+    """
+    Get the average negative
+    """
+    print("---- Average negative ----")
+    print("average negative: %f, %f (x100)" % (Average.get_average_neg(), Average.get_average_neg() * 100.0))
+
+    """
+    Get the average neutral
+    """
+    print("---- Average neutral ----")
+    print("average neutral: %f, %f (x100)" % (Average.get_average_neu(), Average.get_average_neu() * 100.0))
+
+    """
+    Get the average positive
+    """
+    print("---- Average positive ----")
+    print("average positive: %f, %f (x100)" % (Average.get_average_pos(), Average.get_average_pos() * 100.0))

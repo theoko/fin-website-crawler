@@ -19,5 +19,7 @@ class VanguardScraper(FinWebScraper):
             print("Headline: %s" % (span_text))
             print("Article link: %s" % (headline_link_href))
             txt_classifier = Classifier(span_text)
-            print(txt_classifier.sentiment())
-            return (span_text, headline_link_href)
+            sentiment = txt_classifier.sentiment()
+            print(sentiment)
+            self.sentiment = sentiment
+            self.update_avgs()

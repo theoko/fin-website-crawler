@@ -17,7 +17,6 @@ class Database:
             if self.conn.is_connected():
                 cursor = self.conn.cursor()
                 cursor.execute('create database if not exists fin_website')
-                # cursor.commit()
         except Error as e:
             print("Error: ", e)
 
@@ -26,11 +25,9 @@ class Database:
         article_table = "create table if not exists articles (headline varchar(255), link varchar(255), neg double, " \
                         "neu double, pos double, compound double)"
         cursor.execute(article_table)
-        # cursor.commit()
 
         symbols_table = "create table if not exists symbols (symbol varchar(20), link varchar(255))"
         cursor.execute(symbols_table)
-        # cursor.commit()
 
         self.close_connection()
 
@@ -40,14 +37,12 @@ class Database:
             self.conn.cursor().execute("insert into articles (headline, link, neg, neu, pos, compound) values ('%s', '%s', '%f', '%f', '%f', '%f')" % (article_data['title'], article_data['link'], article_data['neg'], article_data['neu'], article_data['pos'], article_data['compound'],))
         except Error as e:
             print("Error: ", e)
-        # self.conn.commit()
 
         self.close_connection()
 
     def insert_symbol(self, symbol, article_link):
         cursor = self.conn.cursor()
-        cursor.execute("insert into symbols (symbol, link) values ('test', 'test')")
-        cursor.commit()
+        cursor.execute("insert into symbols (symbol, link) values ('%s', '%s')" % (symbol, article_link,))
 
         self.close_connection()
 

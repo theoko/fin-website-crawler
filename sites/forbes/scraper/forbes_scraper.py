@@ -28,5 +28,5 @@ class ForbesScraper(FinWebScraper):
             sentiment = txt_classifier.sentiment()
             print(sentiment)
             self.sentiment = sentiment
-            self.update_avg_compound() # update average compound
+            self.update_avgs() # update average compound
             self.save()  # save article to database
