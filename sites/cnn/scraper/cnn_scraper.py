@@ -17,8 +17,4 @@ class CnnScraper(FinWebScraper):
                 print("----")
                 inner_headline_text = ParseUtils.strip_tags(str(inner_headline))
                 print("Headline: %s" % (inner_headline_text))
-                txt_classifier = Classifier(inner_headline_text)
-                sentiment = txt_classifier.sentiment()
-                print(sentiment)
-                self.sentiment = sentiment
-                self.update_avgs()
+                self.classify_headline(inner_headline_text)

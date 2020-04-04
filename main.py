@@ -14,6 +14,7 @@ from sites.vanguard.scraper.vanguard_scraper import VanguardScraper
 from sites.yahoo_finance.scraper.yfinance_scraper import YFinanceScraper
 from utils.average import Average
 from utils.memcached import MemcachedUtils
+from utils.website_average import WebsiteAverage
 
 if __name__ == '__main__':
 
@@ -65,6 +66,8 @@ if __name__ == '__main__':
     ## Runs the Alexa scraper
     top_sites = TopSites()
     top_sites.collect()
+    print(TopSites.weights)
+    # sys.exit("stopped execution")
 
     """
     Run the scraper for each website and store both the article and the link in the database
@@ -72,13 +75,14 @@ if __name__ == '__main__':
 
     # TODO: fix scraper
     ## Runs the yahoo finance scraper
-    # yfinance = YFinanceScraper("https://finance.yahoo.com/q?s=GOOGL")
+    # yfinance = YFinanceScraper("https://finance.yahoo.com")
     # yfinance.run()
 
     # TODO: fix scraper
     ## Runs the marketwatch scraper
-    # mw = MarketwatchScraper("https://www.marketwatch.com/")
-    # mw.run()
+    mw = MarketwatchScraper("https://www.marketwatch.com/")
+    mw.run()
+    # sys.exit("stopped execution")
 
     ## Runs the forbes scraper
     print("---- FORBES ----")
@@ -97,7 +101,7 @@ if __name__ == '__main__':
 
     ## Runs the cnn scraper
     print("---- CNN Business ----")
-    cnn = CnnScraper("https://www.cnn.com/business")
+    cnn = CnnScraper("https://money.cnn.com")
     cnn.run()
 
     ## Runs the balance scraper
@@ -112,9 +116,10 @@ if __name__ == '__main__':
     # vanguard.run()
 
     ## Runs the seeking alpha scraper
-    print("---- Seeking alpha ----")
-    seeking_alpha = SeekingAlphaScraper("https://seekingalpha.com")
-    seeking_alpha.run()
+    # print("---- Seeking alpha ----")
+    # Average.weights.append(TopSites.weights['seekingalpha.com'])
+    # seeking_alpha = SeekingAlphaScraper("https://seekingalpha.com")
+    # seeking_alpha.run()
 
     """
     Get the average compound
@@ -139,3 +144,12 @@ if __name__ == '__main__':
     """
     print("---- Average positive ----")
     print("average positive: %f, %f (x100)" % (Average.get_average_pos(), Average.get_average_pos() * 100.0))
+
+    """
+    Get the weighted compound average
+    """
+    print("---- Weighted compound average ----")
+    # print(WebsiteAverage.websites)
+    # print(TopSites.weights)
+    wa = WebsiteAverage.get_weighted_average_compound()
+    print("weighted compound average based on total sites linking a site: %f, %f (x100)" % (wa, wa * 100.0))

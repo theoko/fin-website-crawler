@@ -10,8 +10,4 @@ class FinancialTimesScraper(FinWebScraper):
             headline_text = headline.text
             print("----")
             print("Headline: %s" %(headline_text))
-            txt_classifier = Classifier(headline_text)
-            sentiment = txt_classifier.sentiment()
-            print(sentiment)
-            self.sentiment = sentiment
-            self.update_avgs()
+            self.classify_headline(headline_text)

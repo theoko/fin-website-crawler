@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class Average:
     # Compound, negative, neutral, positive
     sums = [0.0, 0.0, 0.0, 0.0]
@@ -46,3 +49,4 @@ class Average:
     @staticmethod
     def get_average_pos():
         return Average.get_average(3, 3)
+

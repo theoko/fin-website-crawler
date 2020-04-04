@@ -26,8 +26,4 @@ class SeekingAlphaScraper(FinWebScraper):
             title_text = title.text
             print("----")
             print("Latest articles title: %s" % (title_text))
-            txt_classifier = Classifier(title_text)
-            sentiment = txt_classifier.sentiment()
-            print(sentiment)
-            self.sentiment = sentiment
-            self.update_avgs()  # update averages
+            self.classify_headline(title_text)

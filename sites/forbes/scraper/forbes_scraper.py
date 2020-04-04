@@ -23,10 +23,4 @@ class ForbesScraper(FinWebScraper):
             print("----")
             print("Latest pick link title: %s" % (title))
             print("Latest pick link: %s" % (link))
-            txt_classifier = Classifier(title)
-            # print("Score: %f" % (txt_classifier.sentiment()))
-            sentiment = txt_classifier.sentiment()
-            print(sentiment)
-            self.sentiment = sentiment
-            self.update_avgs() # update average compound
-            self.save()  # save article to database
+            self.classify_headline(title)

@@ -13,8 +13,4 @@ class FoolScraper(FinWebScraper):
             article_title = article.text
             print("----")
             print("Article title: %s" % (article_title))
-            txt_classifier = Classifier(article_title)
-            sentiment = txt_classifier.sentiment()
-            print(sentiment)
-            self.sentiment = sentiment
-            self.update_avgs()
+            self.classify_headline(article_title)
