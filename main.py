@@ -1,4 +1,10 @@
+import datetime
 import sys
+
+import datetime as dt
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 from alexa.top_sites import TopSites
 from db.database import Database
@@ -16,63 +22,18 @@ from utils.average import Average
 from utils.memcached import MemcachedUtils
 from utils.website_average import WebsiteAverage
 
-if __name__ == '__main__':
+weighted_compounds = []
+dates = []
 
-    # Debug
-    # sys.exit("stopped execution")
 
-    # URL of article
-    # This is for testing purposes
-    # Symbols contained in article: 
-    #   - ORCL
-    #   - GOOG
-    #   - GOOGL
-    #   - AMZN
-    #   - MSFT
-    #   - SAP
-    #   - DJIA
-    #   - SPX
-    #   - COMP
-    url = 'https://www.marketwatch.com/story/oracle-earnings-chronic-cloud-concerns-create-crisis-of-confidence-2018-12-14'
-
-    symbols = Symbol()
-
-    # Download symbols (from NASDAQ index)
-    # symbols.download()
-
-    # Will write 3 files:
-    # -- nasdaqlisted.txt
-    # -- otherlisted.txt
-    # -- tickers.txt
-    # symbols.write_file()
-
-    # tickers = get_ticker_list()
-    # stocks = StockParser(url, tickers)
-    # stocks.parse()
-    # print(stocks.getArticleSymbols())
-
-    """
-    Initialize database
-    """
-
-    ## Create db and necessary tables
-    db = Database()
-    db.create_tables()
-
-    """
-    Run the Alexa scraper to find out the website rankings
-    """
-
+def run_alexa_scraper():
     ## Runs the Alexa scraper
     top_sites = TopSites()
     top_sites.collect()
     print(TopSites.weights)
-    # sys.exit("stopped execution")
 
-    """
-    Run the scraper for each website and store both the article and the link in the database
-    """
 
+def run_website_scrapers():
     # TODO: fix scraper
     ## Runs the yahoo finance scraper
     # yfinance = YFinanceScraper("https://finance.yahoo.com")
@@ -121,28 +82,46 @@ if __name__ == '__main__':
     # seeking_alpha = SeekingAlphaScraper("https://seekingalpha.com")
     # seeking_alpha.run()
 
+
+def get_compound():
+    """
+    Print the date that the method started running
+    """
+    time = datetime.datetime.now()
+    print("Started: %s %s" % (time.strftime("%x"), time.strftime("%X")))
+    """
+    Run the Alexa scraper to find out the website rankings
+    """
+    run_alexa_scraper()
+    # sys.exit("stopped execution")
+
+    """
+    Run the scraper for each website and store both the article and the link in the database
+    """
+    run_website_scrapers()
+
     """
     Get the average compound
     """
-    print("---- Average compound ----")
+    print("---- Average compound (not weighted) ----")
     print("average compound: %f, %f (x100)" % (Average.get_average_compound(), Average.get_average_compound() * 100.0))
 
     """
     Get the average negative
     """
-    print("---- Average negative ----")
+    print("---- Average negative (not weighted) ----")
     print("average negative: %f, %f (x100)" % (Average.get_average_neg(), Average.get_average_neg() * 100.0))
 
     """
     Get the average neutral
     """
-    print("---- Average neutral ----")
+    print("---- Average neutral (not weighted) ----")
     print("average neutral: %f, %f (x100)" % (Average.get_average_neu(), Average.get_average_neu() * 100.0))
 
     """
     Get the average positive
     """
-    print("---- Average positive ----")
+    print("---- Average positive (not weighted) ----")
     print("average positive: %f, %f (x100)" % (Average.get_average_pos(), Average.get_average_pos() * 100.0))
 
     """
@@ -153,3 +132,76 @@ if __name__ == '__main__':
     # print(TopSites.weights)
     wa = WebsiteAverage.get_weighted_average_compound()
     print("weighted compound average based on total sites linking a site: %f, %f (x100)" % (wa, wa * 100.0))
+    weighted_compounds.append(wa * 100.0)
+    dates.append(datetime.datetime.now())
+    print("weighted compounds are: " + ', '.join(str(x) for x in weighted_compounds))
+    print("dates are: " + ', '.join(str(x) for x in dates))
+    x = [
+        # dt.datetime(2020, 4, 6, 9, 53),
+        # dt.datetime(2020, 4, 6, 12, 11),
+        # dt.datetime(2020, 4, 6, 12, 52),
+    ]
+    for date in dates:
+        x.append(date)
+    y = [
+        # 5.359826,
+        # -0.997296,
+        # -2.628850,
+    ]
+    for compound in weighted_compounds:
+        y.append(compound)
+    fig, ax = plt.subplots()
+    ax.plot_date(x, y, linestyle='-')
+    fig.autofmt_xdate()
+    plt.show()
+
+
+if __name__ == '__main__':
+    # Debug
+    # sys.exit("stopped execution")
+
+    # URL of article
+    # This is for testing purposes
+    # Symbols contained in article: 
+    #   - ORCL
+    #   - GOOG
+    #   - GOOGL
+    #   - AMZN
+    #   - MSFT
+    #   - SAP
+    #   - DJIA
+    #   - SPX
+    #   - COMP
+    url = 'https://www.marketwatch.com/story/oracle-earnings-chronic-cloud-concerns-create-crisis-of-confidence-2018-12-14'
+
+    symbols = Symbol()
+
+    # Download symbols (from NASDAQ index)
+    # symbols.download()
+
+    # Will write 3 files:
+    # -- nasdaqlisted.txt
+    # -- otherlisted.txt
+    # -- tickers.txt
+    # symbols.write_file()
+
+    # tickers = get_ticker_list()
+    # stocks = StockParser(url, tickers)
+    # stocks.parse()
+    # print(stocks.getArticleSymbols())
+
+    """
+    Initialize database
+    """
+
+    ## Create db and necessary tables
+    # db = Database()
+    # db.create_tables()
+
+    """
+    Get the compound and continue for every hour
+    """
+    get_compound()
+    scheduler = BlockingScheduler()
+    scheduler.add_job(get_compound, 'interval', hours=1)
+    scheduler.start()

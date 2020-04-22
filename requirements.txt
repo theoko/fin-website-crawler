@@ -14,3 +14,4 @@ vaderSentiment
 pyodbc
 pymemcache
 HTMLParser
+apscheduler
