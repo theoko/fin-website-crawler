@@ -15,3 +15,4 @@ pyodbc
 pymemcache
 HTMLParser
 apscheduler
+pandas_datareader
