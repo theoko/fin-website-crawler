@@ -82,6 +82,24 @@ def run_website_scrapers():
     # seeking_alpha = SeekingAlphaScraper("https://seekingalpha.com")
     # seeking_alpha.run()
 
+    ## Runs the fortune scraper
+    # print("---- Fortune ----")
+
+    ## Runs the Morningstar scraper
+    # print("---- Morningstar ----")
+
+    ## Runs the Barron's scraper
+    # print("---- Barron's ----")
+
+    ## Runs the DailyFX scraper
+    # print("---- DailyFX ----")
+
+    ## Runs the Barchart scraper
+    # print("---- Barchart ----")
+
+    ## Runs the Zacks scraper
+    # print("---- Zacks ----")
+
 
 def get_compound():
     """
