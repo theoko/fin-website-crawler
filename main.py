@@ -100,6 +100,12 @@ def run_website_scrapers():
     ## Runs the Zacks scraper
     # print("---- Zacks ----")
 
+    ## Runs the StockCharts.com scraper
+    # print("---- StockCharts.com ----")
+
+    ## Runs TheStreet scraper
+    # print("---- TheStreet ----")
+
 
 def get_compound():
     """
