@@ -9,42 +9,70 @@ the sentiment is positive.
 """
 
 import datetime as dt
+import time
+
 import matplotlib.pyplot as plt
 from matplotlib import style
 import pandas as pd
 import pandas_datareader.data as web
 from pandas_datareader.data import get_quote_yahoo
 
+buys = []
+sells = []
 
-def buy_sell_hold(sentiment):
-    """
-    Sentiment > 6: buy 3x (change to distance from high)
-    Sentiment > 4: buy 2x
-    Sentiment > 2: buy 1x
-    :param sentiment:
-    :return:
-    """
-    etfs = []
-    if sentiment > 6.0:
-        etfs.append('UDOW')
-        etfs.append('SPXL')
-        etfs.append('TQQQ')
-    elif sentiment > 4.0:
-        etfs.append('DDM')
-        etfs.append('SSO')
-        etfs.append('QLD')
-    elif sentiment > 2.0:
-        etfs.append('DIA')
-        etfs.append('SPY')
-        etfs.append('QQQ')
-    for etf in etfs:
-        # Record last price (potential buy)
-        last = get_quote_yahoo(etf)
-        print(last['price'])
+
+class Trade:
+    def __init__(self, sentiment):
+        self.sentiment = sentiment
+
+    def buy_sell_hold(self):
+        """
+        Sentiment > 6: buy 3x (change to distance from high)
+        Sentiment > 4: buy 2x
+        Sentiment > 2: buy 1x
+        :param sentiment:
+        :return:
+        """
+        etfs = []
+        # Check if we are holding
+        if len(buys) > 0:
+            for buy in buys:
+                last = get_quote_yahoo(buy[0])
+                if self.sentiment <= 6.0:
+                    if buy[0] == 'UDOW':
+                        sells.append({})
+                    elif buy[0] == 'SPXL':
+                        sells.append({})
+                    elif buy[0] == 'TQQQ':
+                        sells.append({})
+
+        # Check sentiment to buy
+        if self.sentiment > 6.0:
+            etfs.append('UDOW')
+            etfs.append('SPXL')
+            etfs.append('TQQQ')
+        elif self.sentiment > 4.0:
+            etfs.append('DDM')
+            etfs.append('SSO')
+            etfs.append('QLD')
+        elif self.sentiment > 2.0:
+            etfs.append('DIA')
+            etfs.append('SPY')
+            etfs.append('QQQ')
+        if len(etfs) == 0:
+            print("No ETFs to buy")
+        else:
+            for etf in etfs:
+                # Record last price (potential buy)
+                last = get_quote_yahoo(etf)
+                print("Last %s price: %f" % (etf, last['price']))
+                buys.append({etf: last['price'], 'timestamp': str(time.strftime("%Y/%m/%d %H:%M:%S"))})
 
 
 if __name__ == '__main__':
     style.use('ggplot')
+    trade = Trade(4.5)
+    trade.buy_sell_hold()
     # -------------------------
     # start = dt.datetime(2000,1,1)
     # end = dt.datetime(2019,12,31)
@@ -77,7 +105,7 @@ if __name__ == '__main__':
     # sp500_3x_curr = get_quote_yahoo('SPXL')
     # nasdaq100_3x_curr = get_quote_yahoo('TQQQ')
     # print(nasdaq100_3x_curr['price'])
-    compounds = [
+    const_compounds = [
         1.2890855673030313, 1.1273886511049946, 0.7915099489074098, 1.5392346747961665, -0.9004362673032805,
         3.00032392541686, 3.3268898401816864, 3.380221205438288, 1.3924729889582093, 1.1994682159441465,
         5.116000879084923, 6.614984131077104, 6.851229982993045, 6.851229982993045, 6.862970225694011,
@@ -100,4 +128,4 @@ if __name__ == '__main__':
         -8.733780861401025, -7.665341127139034, -7.543380292214199, -6.281864646616006, -5.83420942120665,
         -6.860775798789643, -6.439354588118423, -7.228078127677165
     ]
-    starting_date = '2020-04-22 11:56:58.379312'
+    const_starting_date = '2020-04-22 11:56:58.379312'

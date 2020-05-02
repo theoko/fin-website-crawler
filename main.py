@@ -1,25 +1,18 @@
 import datetime
-import sys
 
-import datetime as dt
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 from alexa.top_sites import TopSites
-from db.database import Database
 from misc.stock_data.symbols import Symbol
 from sites.cnn.scraper.cnn_scraper import CnnScraper
+from sites.financial_times.scraper.ft_scraper import FinancialTimesScraper
 from sites.fool.scraper.fool_scaper import FoolScraper
 from sites.forbes.scraper.forbes_scraper import ForbesScraper
-from sites.financial_times.scraper.ft_scraper import FinancialTimesScraper
 from sites.marketwatch.scraper.marketwatch_scraper import MarketwatchScraper
-from sites.seeking_alpha.scraper.seeking_alpha_scraper import SeekingAlphaScraper
 from sites.the_balance.scraper.the_balance_scraper import TheBalanceScraper
-from sites.vanguard.scraper.vanguard_scraper import VanguardScraper
-from sites.yahoo_finance.scraper.yfinance_scraper import YFinanceScraper
+from trading.trade import Trade
 from utils.average import Average
-from utils.memcached import MemcachedUtils
 from utils.website_average import WebsiteAverage
 
 weighted_compounds = []
@@ -158,6 +151,9 @@ def get_compound():
     print("weighted compound average based on total sites linking a site: %f, %f (x100)" % (wa, wa * 100.0))
     weighted_compounds.append(wa * 100.0)
     dates.append(datetime.datetime.now())
+    # Trade based on sentiment
+    trade = Trade(weighted_compounds[-1])
+    trade.buy_sell_hold()
     print("weighted compounds are: " + ', '.join(str(x) for x in weighted_compounds))
     print("dates are: " + ', '.join(str(x) for x in dates))
     x = [
