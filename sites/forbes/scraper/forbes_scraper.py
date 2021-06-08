@@ -6,7 +6,7 @@ class ForbesScraper(FinWebScraper):
     def run(self):
         soup = super(ForbesScraper, self).get_soup_object()
         # Gets the breaking article from Forbes investing page
-        headline = soup.find_all("a", {"class": "headlink h1--dense card__color--benjamins-green"})[0]
+        headline = soup.find_all("a", {"class": "headlink h1--dense"})[0]
         headline_text = headline.text
         headline_link = headline.get('href', '')
         print("----")
