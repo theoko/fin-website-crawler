@@ -1,4 +1,4 @@
-# Financial News Website Picker
+# Fin News Website Picker
 A program that analyzes the behavior of stocks in relation to online articles and tries to pick the most reliable websites.
 
 # Libraries
